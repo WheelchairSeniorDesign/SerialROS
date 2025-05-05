@@ -20,6 +20,7 @@ class SerialPublisher(Node):
         self.timer = self.create_timer(0.05, self.timer_callback)
         self.dist1 = 0.0
         self.dist2 = 0.0
+        self.dist3 = 0.0
 
     def timer_callback(self):
         while self.ser.in_waiting > 0:
@@ -27,6 +28,7 @@ class SerialPublisher(Node):
 
             match1 = re.match(r'Resp1:\s*([\d.]+)', line)
             match2 = re.match(r'Resp2:\s*([\d.]+)', line)
+            match3 = re.match(r'Resp3:\s*([\d.]+)', line)
 
             if match1:
                 self.dist1 = float(match1.group(1))
@@ -36,10 +38,14 @@ class SerialPublisher(Node):
                 self.dist2 = float(match2.group(1))
                 self.get_logger().info(f"Resp2: {self.dist2} m")
 
+            if match3:
+                self.dist3 = float(match3.group(1))
+                self.get_logger().info(f"Resp3: {self.dist3} m")
+
         msg = UWB()
         msg.dist1 = self.dist1
         msg.dist2 = self.dist2
-        msg.dist3 = 0.0
+        msg.dist3 = self.dist3
         msg.dist4 = 0.0
         msg.dist5 = 0.0
         self.publisher_.publish(msg)
@@ -54,3 +60,4 @@ def main(args=None):
 
 if __name__ == '__main__':
     main()
+  
