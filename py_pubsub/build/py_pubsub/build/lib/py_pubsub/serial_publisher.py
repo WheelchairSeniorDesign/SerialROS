@@ -6,7 +6,7 @@ import re
 import sys
 
 class SerialPublisher(Node):
-    def __init__(self, serial_port='/dev/ttyACM0'):
+    def __init__(self, serial_port='/dev/ttyUSB0'):
         super().__init__('serial_publisher')
 
         self.publisher_ = self.create_publisher(UWB, 'uwb_data', 10)
@@ -63,7 +63,7 @@ class SerialPublisher(Node):
 
 def main(args=None):
     rclpy.init(args=args)
-    serial_port = sys.argv[1] if len(sys.argv) > 1 else '/dev/ttyACM0'
+    serial_port = sys.argv[1] if len(sys.argv) > 1 else '/dev/ttyUSB0'
     node = SerialPublisher(serial_port)
     rclpy.spin(node)
     node.destroy_node()
